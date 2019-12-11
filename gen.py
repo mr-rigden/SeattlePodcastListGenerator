@@ -90,7 +90,7 @@ def process_feed(url):
     try:
         feed['homepage'] = d['feed']['link']
     except KeyError:
-        log_bad_url(url + "No Homepage)
+        log_bad_url(url + "No Homepage")
         return None
     feed['description'] = d['feed']['subtitle']
     feed['description'] = feed['description'].replace("\r"," ")
@@ -241,3 +241,4 @@ def full_run():
 
 
 
+full_run()
