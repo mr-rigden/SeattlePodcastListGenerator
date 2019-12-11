@@ -26,10 +26,6 @@ env = Environment(loader=file_loader)
 date_now = f"{datetime.datetime.now():%Y-%m-%d}"
 
 
-
-bad_urls = []
-good_urls = []
-
 def get_indie_urls():
     indie_file_path = os.path.join(data_dir, 'indie.txt')
     with open(indie_file_path) as f:
@@ -81,20 +77,20 @@ def process_feed(url):
     feed = {}
     r = requests.get(url)
     if r.status_code != 200:
-        bad_urls.append(url)
+        log_bad_url(url + "Bad Status Code")
         return None
     d = feedparser.parse(r.content)
     soup = BeautifulSoup(r.content, 'html.parser')
     try:
         feed['title'] = d['feed']['title']
     except KeyError:
-        bad_urls.append(url)
+        log_bad_url(url + "Bad Feed")
         return None
     feed['sortable_title'] = better_sortable_text(feed['title'])
     try:
         feed['homepage'] = d['feed']['link']
     except KeyError:
-        bad_urls.append(url)
+        log_bad_url(url + "No Homepage)
         return None
     feed['description'] = d['feed']['subtitle']
     feed['description'] = feed['description'].replace("\r"," ")
@@ -229,8 +225,19 @@ def render_categories_list_page(categories):
     f.write(output)
     f.close()
 
-save_data()
-indie, radio = load_data()
-render_all_page(indie, radio)
-render_category_pages(indie, radio)
+
+def log_bad_url(url, message):
+    f = open("bad_url.log", "a+")
+    f.write(url + " - " + message + '\n')
+    f.close()
+
+
+def full_run():
+    save_data()
+    indie, radio = load_data()
+    render_all_page(indie, radio)
+    render_category_pages(indie, radio)
+
+
+
 
