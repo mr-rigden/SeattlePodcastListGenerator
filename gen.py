@@ -76,21 +76,23 @@ def is_podcast_active(podcast):
 def process_feed(url):
     feed = {}
     r = requests.get(url)
-    if r.status_code != 200:
-        log_bad_url(url + "Bad Status Code")
-        return None
-    d = feedparser.parse(r.content)
     soup = BeautifulSoup(r.content, 'html.parser')
+    x = soup.find("title").string
+    d = feedparser.parse(r.content)
+
+    print(d)
+    
     try:
         feed['title'] = d['feed']['title']
     except KeyError:
-        log_bad_url(url + "Bad Feed")
+        print('title')
+        log_bad_url(url, "Bad Feed")
         return None
     feed['sortable_title'] = better_sortable_text(feed['title'])
     try:
         feed['homepage'] = d['feed']['link']
     except KeyError:
-        log_bad_url(url + "No Homepage")
+        log_bad_url(url, "No Homepage")
         return None
     feed['description'] = d['feed']['subtitle']
     feed['description'] = feed['description'].replace("\r"," ")
@@ -232,13 +234,11 @@ def log_bad_url(url, message):
     f.close()
 
 
+
 def full_run():
     save_data()
     indie, radio = load_data()
     render_all_page(indie, radio)
     render_category_pages(indie, radio)
-
-
-
 
 full_run()

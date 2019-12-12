@@ -22,4 +22,4 @@ These podcasts about {{ category }} haven't released an episode in the last 90 d
 
 ### Add Your Podcast!
 
- If you would like to add your Podcast, please email Jason Rigden at jasonrigden@gmail.com. You can also email Jason with any questions or comments about the list.
+If you would like to add your Podcast, please email Jason Rigden at jasonrigden@gmail.com. You can also email Jason with any questions or comments about the list.
